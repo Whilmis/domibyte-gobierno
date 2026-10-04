@@ -1,0 +1,6 @@
+{
+  "name": "DomiByte B2G - Portal Institucional República Dominicana",
+  "description": "Portal Institucional y Plataforma de Suministro de Equipamiento Tecnológico B2G para el Estado Dominicano bajo la Ley 340-06 y estándares NORTIC.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
