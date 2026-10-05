@@ -1,18 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUIStore } from '../store/useUIStore';
 import { TECHNICAL_COMPARISON_DATA } from '../data/mockData';
-import { ScreenType, Language } from '../types';
 
-interface PortalInstitucionalProps {
-  onNavigateScreen: (screen: ScreenType) => void;
-  onOpenDossierModal: () => void;
-  language: Language;
-}
-
-export const PortalInstitucional: React.FC<PortalInstitucionalProps> = ({
-  onNavigateScreen,
-  onOpenDossierModal,
-  language
-}) => {
+export const PortalInstitucional: React.FC = () => {
+  const navigate = useNavigate();
+  const onNavigateScreen = (screen: string) => navigate(screen === 'equipamiento' ? '/equipamiento' : '/');
+  const onOpenDossierModal = () => useUIStore.getState().setIsDossierModalOpen(true);
+  const language = useUIStore((state) => state.language);
   return (
     <div className="w-full">
       {/* ==================== 1. HERO SECTION (OSCURO) ==================== */}

@@ -1,25 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ScreenType, Language } from '../types';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useTenderStore } from '../store/useTenderStore';
+import { useUIStore } from '../store/useUIStore';
+import LogoDomiByte from '../assets/logo-transparent.png';
 
-interface TopNavBarProps {
-  currentScreen: ScreenType;
-  onNavigateScreen: (screen: ScreenType) => void;
-  tenderCount: number;
-  onOpenTenderBasket: () => void;
-  onOpenDossierModal: () => void;
-  language: Language;
-  onToggleLanguage: () => void;
-}
+export const TopNavBar: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentScreen = location.pathname.startsWith('/equipamiento') ? 'equipamiento' : 'portal';
+  
+  const tenderCount = useTenderStore((state) => state.totalTenderCount());
+  const setIsBasketModalOpen = useUIStore((state) => state.setIsBasketModalOpen);
+  const setIsDossierModalOpen = useUIStore((state) => state.setIsDossierModalOpen);
+  const language = useUIStore((state) => state.language);
+  const toggleLanguage = useUIStore((state) => state.toggleLanguage);
 
-export const TopNavBar: React.FC<TopNavBarProps> = ({
-  currentScreen,
-  onNavigateScreen,
-  tenderCount,
-  onOpenTenderBasket,
-  onOpenDossierModal,
-  language,
-  onToggleLanguage
-}) => {
+  const onNavigateScreen = (screen: string) => navigate(screen === 'equipamiento' ? '/equipamiento' : '/');
+  const onOpenTenderBasket = () => setIsBasketModalOpen(true);
+  const onOpenDossierModal = () => setIsDossierModalOpen(true);
+  const onToggleLanguage = () => toggleLanguage();
   const [isInicioOpen, setIsInicioOpen] = useState(false);
   const [isEquiposOpen, setIsEquiposOpen] = useState(false);
   const [mobileActiveDropdown, setMobileActiveDropdown] = useState<'inicio' | 'equipos' | null>(null);
@@ -193,7 +192,7 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
     },
     {
       id: 'contacto-b2g',
-      label: language === 'es' ? 'Solicitud de Cotización Institucional' : 'Institutional Quotation Request',
+      label: language === 'es' ? 'Solicitud de Cotización para Estudio de Mercado' : 'Market Study Quotation Request',
       icon: 'request_quote',
       desc: language === 'es' ? 'Formulario oficial de requerimiento' : 'Official procurement RFP form'
     }
@@ -229,7 +228,7 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
 
       {/* STICKY MAIN HEADER */}
       <header className="sticky top-0 z-50 bg-[#071324]/95 backdrop-blur-md border-b border-cyan-500/20 shadow-md">
-        <div className="flex justify-between items-center w-full px-4 lg:px-12 max-w-7xl mx-auto py-3.5">
+        <div className="flex justify-between items-center w-full px-4 lg:px-12 max-w-7xl mx-auto py-2">
           {/* Brand Logo */}
           <div className="flex items-center gap-3">
             <button
@@ -241,9 +240,9 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
               title="DomiByte GovTech B2G"
             >
               <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuABinU7fEnD9JXrjkKdlGbVEJD2IsPLctUABQns4CE9nXxtHqIbNnXau37TQdZZW4EZJ0H9zzAW6BEbP_GfuH31McHhgd3YrrRqTLPJhakn0W0u8Tjhb_OM6nnNTUOF5hYcT-dKNF5UD2Nicf4vOzONeZbr5ob-WiVhQgZzkie73PWLR2wbfvmMj65AQWBhskp1jHOKMv4SzIYatzqbgrjfEmbNQq6ScpUIlTL58VPUUrUo8pjKosPOgHkU4qJ8hJcAwqo"
+                src={LogoDomiByte}
                 alt="DomiByte Logo"
-                className="h-10 w-auto object-contain rounded-md shadow-sm"
+                className="h-10 sm:h-12 w-auto object-contain drop-shadow-md scale-[1.35] origin-left"
               />
               <div className="hidden sm:flex flex-col border-l border-slate-700 pl-3">
                 <span className="text-[11px] font-mono font-bold text-cyan-400 tracking-wider uppercase">
@@ -396,7 +395,7 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
             <button
               onClick={onOpenTenderBasket}
               className="relative p-2 rounded-lg bg-slate-900 border border-slate-700/80 text-cyan-300 hover:bg-slate-800 transition-colors flex items-center gap-1.5 focus:outline-none cursor-pointer"
-              title={language === 'es' ? 'Canasta de Pliego Técnico PPT' : 'Tender Specs Basket'}
+              title={language === 'es' ? 'Generador de TDR (Términos de Referencia)' : 'TDR Generator'}
             >
               <span className="material-symbols-outlined text-[19px]">description</span>
               <span className="hidden sm:inline text-xs font-mono font-semibold">PPT</span>

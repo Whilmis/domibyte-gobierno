@@ -1,12 +1,12 @@
 import React from 'react';
-import { ScreenType } from '../types';
+import { useNavigate } from 'react-router-dom';
+import { useUIStore } from '../store/useUIStore';
+import LogoDomiByte from '../assets/logo-transparent.png';
 
-interface FooterProps {
-  onNavigateScreen: (screen: ScreenType) => void;
-  onOpenDossierModal: () => void;
-}
-
-export const Footer: React.FC<FooterProps> = ({ onNavigateScreen, onOpenDossierModal }) => {
+export const Footer: React.FC = () => {
+  const navigate = useNavigate();
+  const onNavigateScreen = (screen: string) => navigate(screen === 'equipamiento' ? '/equipamiento' : '/');
+  const onOpenDossierModal = () => useUIStore.getState().setIsDossierModalOpen(true);
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -39,9 +39,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateScreen, onOpenDossierM
           <div className="md:col-span-2">
             <div className="mb-4 flex items-center">
               <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjesmWAbsIXm7Vfnl1hueclnSZJR8yUraBIpMbpcH9U0YEo4jsx1wYJx36r5DnTZqyFvke0dFyllSpmS_3zTZZcoVpv-qxXV4qZWh5XK6xianbIJjD1wW_6t84d3iREgDBrc-UDOSF6w-5rrPIYrDwG_XdslsKKCHKjT8y1AmmMI7D_H1AXuir0hXGzdERsGYFsUz_53HZjAr9LrdueIMsxVdlJ2-zViH_mQaxi5DaJhANP284M4TyAHaJ_mw6zDGkyQc"
-                alt="DomiByte"
-                className="h-14 w-auto object-contain rounded-lg shadow-sm"
+                src={LogoDomiByte}
+                alt="DomiByte Logo"
+                className="h-16 md:h-20 w-auto object-contain drop-shadow-lg"
               />
             </div>
             <p className="text-body-sm font-body-sm text-slate-400 max-w-md mb-4 leading-relaxed">

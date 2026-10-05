@@ -1,19 +1,13 @@
 import React, { useState } from 'react';
-import { HardwareItem } from '../types';
+import { useTenderStore } from '../store/useTenderStore';
+import { useUIStore } from '../store/useUIStore';
 
-interface ModalFichaPPTProps {
-  item: HardwareItem | null;
-  onClose: () => void;
-  onAddToTender: (item: HardwareItem) => void;
-  isAlreadyInTender: boolean;
-}
-
-export const ModalFichaPPT: React.FC<ModalFichaPPTProps> = ({
-  item,
-  onClose,
-  onAddToTender,
-  isAlreadyInTender
-}) => {
+export const ModalFichaPPT: React.FC = () => {
+  const item = useUIStore((state) => state.activeFichaItem);
+  const onClose = () => useUIStore.getState().setActiveFichaItem(null);
+  const onAddToTender = useTenderStore((state) => state.addToTender);
+  const basket = useTenderStore((state) => state.basket);
+  const isAlreadyInTender = item ? basket.some((b) => b.item.id === item.id) : false;
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
 
@@ -171,7 +165,7 @@ export const ModalFichaPPT: React.FC<ModalFichaPPTProps> = ({
               <span className="material-symbols-outlined text-[16px]">
                 {isAlreadyInTender ? 'check' : 'add'}
               </span>
-              <span>{isAlreadyInTender ? 'En Canasta de Pliegos' : 'Agregar a Canasta PPT'}</span>
+              <span>{isAlreadyInTender ? 'Agregado al Estudio' : 'Incluir en el Estudio'}</span>
             </button>
           </div>
 

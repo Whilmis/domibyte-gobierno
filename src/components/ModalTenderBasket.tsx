@@ -1,25 +1,27 @@
 import React, { useState } from 'react';
-import { TenderBasketItem } from '../types';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useTenderStore } from '../store/useTenderStore';
+import { useUIStore } from '../store/useUIStore';
 
-interface ModalTenderBasketProps {
-  isOpen: boolean;
-  onClose: () => void;
-  basket: TenderBasketItem[];
-  onUpdateQuantity: (id: string, delta: number) => void;
-  onRemoveItem: (id: string) => void;
-  onClearBasket: () => void;
-  onGoToQuote: () => void;
-}
+export const ModalTenderBasket: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const basket = useTenderStore((state) => state.basket);
+  const onUpdateQuantity = useTenderStore((state) => state.updateQuantity);
+  const onRemoveItem = useTenderStore((state) => state.removeFromTender);
+  const onClearBasket = useTenderStore((state) => state.clearTender);
+  const isOpen = useUIStore((state) => state.isBasketModalOpen);
+  const onClose = () => useUIStore.getState().setIsBasketModalOpen(false);
 
-export const ModalTenderBasket: React.FC<ModalTenderBasketProps> = ({
-  isOpen,
-  onClose,
-  basket,
-  onUpdateQuantity,
-  onRemoveItem,
-  onClearBasket,
-  onGoToQuote
-}) => {
+  const onGoToQuote = () => {
+    if (location.pathname !== '/equipamiento') {
+      navigate('/equipamiento');
+    }
+    setTimeout(() => {
+      const el = document.getElementById('contacto-b2g');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
   const [downloadSuccess, setDownloadSuccess] = useState(false);
   const [copiedAll, setCopiedAll] = useState(false);
 
@@ -84,7 +86,7 @@ export const ModalTenderBasket: React.FC<ModalTenderBasketProps> = ({
                 <span className="material-symbols-outlined text-[28px]">inventory_2</span>
               </div>
               <h4 className="text-base font-semibold text-white">
-                La canasta de pliego técnico está vacía
+                El documento de pliegos técnicos está vacío
               </h4>
               <p className="text-xs text-slate-400 max-w-sm mx-auto">
                 Navegue por el Catálogo Homologado o Puestos de Trabajo y haga clic en{' '}
@@ -99,7 +101,7 @@ export const ModalTenderBasket: React.FC<ModalTenderBasketProps> = ({
                   onClick={onClearBasket}
                   className="text-rose-400 hover:text-rose-300 font-medium transition-colors"
                 >
-                  Vaciar canasta
+                  Limpiar selección
                 </button>
               </div>
 
@@ -191,7 +193,7 @@ export const ModalTenderBasket: React.FC<ModalTenderBasketProps> = ({
               }}
               className="px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white transition-colors"
             >
-              Ir a Formulario de Solicitud
+              Solicitar Cotización Oficial
             </button>
 
             {basket.length > 0 && (

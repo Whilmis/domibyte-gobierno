@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
+import { useUIStore } from '../store/useUIStore';
 
-interface ModalDossierRPEProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export const ModalDossierRPE: React.FC<ModalDossierRPEProps> = ({ isOpen, onClose }) => {
+export const ModalDossierRPE: React.FC = () => {
+  const isOpen = useUIStore((state) => state.isDossierModalOpen);
+  const onClose = () => useUIStore.getState().setIsDossierModalOpen(false);
   const [formData, setFormData] = useState({
     institution: '',
     department: '',
